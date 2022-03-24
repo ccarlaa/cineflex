@@ -3,7 +3,7 @@ import "./style.css";
 
 function Footer() {
     return (
-        <footer className="footer">
+        <footer className="chosen-movie">
             <img src="https://nerdsefilmes.com/wp-content/uploads/2022/03/Turning-Red-da-Pixar-chegou-hoje-ao-Disney-Plus.png" alt="" />
             <h2>Turning Red</h2>
         </footer>
