@@ -173,3 +173,13 @@ button {
     background-color: #FBE192;
     border-bottom: 1px solid #F7C52B;
 }
+
+.grey {
+    background-color: #C3CFD9;
+    border-bottom: 1px solid #808F9D;
+}
+
+.blue {
+    background-color: #8DD7CF;
+    border-bottom: 1px solid #1AAE9E;
+}

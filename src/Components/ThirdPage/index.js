@@ -28,14 +28,34 @@ function Subtitles(props) {
         </div>
     )
 }
+let array = []
+let selected = []
 
 function HtmlSeats(seat) {
-    // const [seats, setSeats] = useState([])
-    // if(seat.class === true){
-    return (
-        <div className={`seat ${seat.class}`} >{seat.number}</div>
-    )
-    // }
+
+    const [seats, setSeats] = useState([]);
+
+    selected = array.indexOf(seats);
+    console.log("seats",seats)
+    console.log("selected",selected)
+    console.log(array)
+
+
+    if(seat.class === true){
+        return (
+            <div className={`seat ${seat.class}`} >{seat.number}</div>
+        )
+    }else if(selected == -1){
+        return (
+            <div onClick={() => {setSeats(...seats, seat.number); array = [...array, seat.number]}} className="seat grey" >{seat.number}</div>
+        )
+    }else if(selected != -1 ){
+        array.splice(selected, 1)
+        console.log("arraydois",array)
+        return (
+            <div onClick={() => {setSeats(...seats, seat.number); array = [...array, seat.number]}} className="seat blue" >{seat.number}</div>
+        )
+    }
 }
 
 function HtmlThirdPage() {
@@ -48,14 +68,11 @@ function HtmlThirdPage() {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSeats}/seats`);
         promisse.then((answer) => {
             setMovie(answer.data)
-            console.log("recebi")
         });
         promisse.catch((warning) => console.log("ERRO",warning.response));
     }, []);
 
     let seatsInfos = movie.seats;
-
-    console.log(seatsInfos)
 
     if(movie !== false){
         return(
