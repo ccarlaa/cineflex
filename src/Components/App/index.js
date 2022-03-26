@@ -15,8 +15,8 @@ export default function App() {
             <Header />
             <Routes>
                 <Route path="/" element={<FirstPage />} />
-                <Route path="/SecondPage" element={<SecondPage />} />
-                <Route path="/ThirdPage" element={<ThirdPage />} />
+                <Route path="/SecondPage/:idMovie" element={<SecondPage />} />
+                <Route path="/ThirdPage/:idSeats" element={<ThirdPage />} />
                 <Route path="/FourthPage" element={<FourthPage />}/>
             </Routes>
         </BrowserRouter>

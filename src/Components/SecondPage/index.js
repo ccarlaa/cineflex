@@ -1,45 +1,79 @@
+import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+import Loading from "../Loading/Loading";
 
 import "./style.css";
 
-function Footer() {
+function Footer(movie) {
     return (
         <footer className="chosen-movie">
-            <img src="https://nerdsefilmes.com/wp-content/uploads/2022/03/Turning-Red-da-Pixar-chegou-hoje-ao-Disney-Plus.png" alt="" />
-            <h2>Turning Red</h2>
+            <img src={movie.poster} alt="" />
+            <h2>{movie.title}</h2>
         </footer>
     )
 }
 
 
+
 function HtmlMovieSection(movie) {
+
+    let showtimes = movie.showtimes;
+
     return (
         <>
-            <p className="day">{movie.day}</p>
+            <p className="day">{movie.day} - {movie.date}</p>
             <div className="schedules">
-                <div className="time">{movie.schedules}</div>
-                <div className="time">{movie.schedules}</div>
-            </div>
-            <p className="day">{movie.day}</p>
-            <div className="schedules">
-                <div className="time">{movie.schedules}</div>
-                <div className="time">{movie.schedules}</div>
+                {showtimes.map( time => 
+                    {
+                        return (
+                        <Link to={`/ThirdPage/${time.id}`} >
+                            <div className="time">
+                                <a>{time.name}</a>
+                            </div>
+                        </Link>
+                        )
+                    }
+                )}
             </div>
         </>
     )
 }
 
 function HtmlSecondPage() {
-    return(
-        <>
-            <section className="choose-session">
-                <h2>Selecione o horário</h2>
-                <article className="movie-sessions">
-                    <HtmlMovieSection day="Quinta-feira - 24/06/2021" schedules="13:00"/>  {/* MAP COM OS DIAS E HORÁRIOS*/}
-                </article>
-            </section>
-            <Footer />
-        </>
-    )
+
+    const [movie, setMovie] = useState(false);
+
+    const {idMovie} = useParams();
+
+    useEffect(() => {
+        const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idMovie}/showtimes`);
+        promisse.then((answer) => {
+            setMovie(answer.data)
+        });
+        promisse.catch((warning) => console.log("ERRO",warning.response));
+    }, []);
+
+    let days = movie.days;
+
+    if(movie !== false){
+        return(
+            <>
+                <section className="choose-session">
+                    <h2>Selecione o horário</h2>
+                    <article className="movie-sessions">
+                        {days.map(session => <HtmlMovieSection day={session.weekday} date={session.date} showtimes={session.showtimes}/>)}
+                    </article>
+                </section>
+                <Footer poster={movie.posterURL} title={movie.title}/>
+            </>
+        )
+    }else{
+        return (
+            <Loading />
+        )
+    }
 }
 
 export default function SecondPage() {

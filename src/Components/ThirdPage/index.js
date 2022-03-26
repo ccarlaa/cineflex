@@ -1,9 +1,11 @@
+import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import "./style.css";
 
+import Loading from "../Loading/Loading";
 
-let numbers = [];
-let number = 1;
 
 function Input(props) {
     return (
@@ -28,37 +30,59 @@ function Subtitles(props) {
 }
 
 function HtmlSeats(seat) {
+    // const [seats, setSeats] = useState([])
+    // if(seat.class === true){
     return (
-        <div className="seat">{seat.number}</div>
+        <div className={`seat ${seat.class}`} >{seat.number}</div>
     )
+    // }
 }
 
 function HtmlThirdPage() {
-    while(number <= 50){
-        numbers = [...numbers, number];
-        number++;
+
+    const [movie, setMovie] = useState(false);
+
+    const {idSeats} = useParams();
+
+    useEffect(() => {
+        const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSeats}/seats`);
+        promisse.then((answer) => {
+            setMovie(answer.data)
+            console.log("recebi")
+        });
+        promisse.catch((warning) => console.log("ERRO",warning.response));
+    }, []);
+
+    let seatsInfos = movie.seats;
+
+    console.log(seatsInfos)
+
+    if(movie !== false){
+        return(
+            <>
+                <section className="choose-seats">
+                    <h2>Selecione o(s) assento(s)</h2>
+                    <div className="seats">
+                        {seatsInfos.map(number => <HtmlSeats number={number.name} class={number.isAvailable}/>)}
+                    </div>
+                    <div className="subtitle">
+                        <Subtitles class="selected" description="Selecionado"/>
+                        <Subtitles class="free" description="Disponível"/>
+                        <Subtitles class="unavailable" description="Indisponível"/>
+                    </div>
+                    <Input title="Nome do comprador:" class="name" placeholder="Digite seu nome..." />
+                    <Input title="CPF do comprador:" class="cpf" placeholder="Digite seu CPF..." />
+                </section>
+                <footer className="footer">
+                    <button type="button" class="next-page">Reservar assento(s)</button>
+                </footer>
+            </>
+        )
+    }else{
+        return (
+            <Loading />
+        )
     }
-    console.log(numbers)
-    return(
-        <>
-            <section className="choose-seats">
-                <h2>Selecione o(s) assento(s)</h2>
-                <div className="seats">
-                    {numbers.map(number => <HtmlSeats number={number} />)}
-                </div>
-                <div className="subtitle">
-                    <Subtitles class="selected" description="Selecionado"/>
-                    <Subtitles class="free" description="Disponível"/>
-                    <Subtitles class="unavailable" description="Indisponível"/>
-                </div>
-                <Input title="Nome do comprador:" class="name" placeholder="Digite seu nome..." />
-                <Input title="CPF do comprador:" class="cpf" placeholder="Digite seu CPF..." />
-            </section>
-            <footer class="footer">
-                <button type="button" class="next-page">Reservar assento(s)</button>
-            </footer>
-        </>
-    )
 }
 
 export default function ThirdPage() {

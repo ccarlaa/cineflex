@@ -168,3 +168,8 @@ button {
     text-align: center;
     color: white;
 }
+
+.true {
+    background-color: #FBE192;
+    border-bottom: 1px solid #F7C52B;
+}
