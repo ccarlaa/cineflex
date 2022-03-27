@@ -28,33 +28,43 @@ function Subtitles(props) {
         </div>
     )
 }
+
 let array = []
-let selected = []
 
 function HtmlSeats(seat) {
-
-    const [seats, setSeats] = useState([]);
-
-    selected = array.indexOf(seats);
-    console.log("seats",seats)
-    console.log("selected",selected)
-    console.log(array)
-
-
+    const [selected, setSelected] = useState({number: seat.number, isAvailable: false, id: seat.id})
     if(seat.class === true){
         return (
-            <div className={`seat ${seat.class}`} >{seat.number}</div>
+        <div className="seat true" >{seat.number}</div>
         )
-    }else if(selected == -1){
-        return (
-            <div onClick={() => {setSeats(...seats, seat.number); array = [...array, seat.number]}} className="seat grey" >{seat.number}</div>
-        )
-    }else if(selected != -1 ){
-        array.splice(selected, 1)
-        console.log("arraydois",array)
-        return (
-            <div onClick={() => {setSeats(...seats, seat.number); array = [...array, seat.number]}} className="seat blue" >{seat.number}</div>
-        )
+    }else if(seat.number == selected.number){
+        if(selected.isAvailable === false){
+            return (
+                <div onClick={() => {
+                    setSelected({number: seat.number, isAvailable: true, id: seat.id});
+                    if(array.includes(seat.id)){
+                        array = array.filter((elem) => elem!==seat.id)
+
+                    }else{
+                        array.push(seat.id)
+                    }
+                }
+                } className="seat grey" >{seat.number}</div>
+            )
+        }else{
+            return (
+                <div onClick={() => {
+                    setSelected({number: seat.number, isAvailable: false, id: seat.id});
+                    if(array.includes(seat.id)){
+                        array = array.filter((elem) => elem!==seat.id)
+
+                    }else{
+                        array.push(seat.id)
+                    }
+                }
+            } className="seat blue" >{seat.number}</div>
+            )
+        }
     }
 }
 
@@ -80,7 +90,7 @@ function HtmlThirdPage() {
                 <section className="choose-seats">
                     <h2>Selecione o(s) assento(s)</h2>
                     <div className="seats">
-                        {seatsInfos.map(number => <HtmlSeats number={number.name} class={number.isAvailable}/>)}
+                        {seatsInfos.map(number => <HtmlSeats number={number.name} class={number.isAvailable} id={number.id}/>)}
                     </div>
                     <div className="subtitle">
                         <Subtitles class="selected" description="Selecionado"/>
