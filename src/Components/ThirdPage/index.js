@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -6,6 +6,7 @@ import "./style.css";
 
 import Loading from "../Loading/Loading";
 import Footer from "../Footer"
+import FourthPage from "../FourthPage"
 
 function Subtitles(props) {
     return (
@@ -16,39 +17,37 @@ function Subtitles(props) {
     )
 }
 
-let array = [];
-
 function HtmlSeats(seat) {
-    const [selected, setSelected] = useState({number: seat.number, isAvailable: false, id: seat.id})
-    console.log(array)
-    if(seat.class === true){
+    let {number, orange, id, setArray, array} = seat
+    const [selected, setSelected] = useState({number: number, isAvailable: false, id: id})
+    if(orange === true){
         return (
-        <div className="seat true" >{seat.number}</div>
+        <div className="seat true" >{number}</div>
         )
-    }else if(seat.number === selected.number){
+    }else if(number === selected.number){
         if(selected.isAvailable === false){
             return (
                 <div onClick={() => {
-                        setSelected({number: seat.number, isAvailable: true, id: seat.id});
-                        if(array.includes(seat.id)){
-                            array = array.filter((elem) => elem!==seat.id);
+                        setSelected({number: number, isAvailable: true, id: id});
+                        if(array.includes(id)){
+                            setArray(array.filter((elem) => elem!==id));
                         }else{
-                            array.push(seat.id);
+                            setArray([...array, id]);
                         }
                     }
-                } className="seat grey" >{seat.number}</div>
+                } className="seat grey" >{number}</div>
             )
         }else{
             return (
                 <div onClick={() => {
-                        setSelected({number: seat.number, isAvailable: false, id: seat.id});
-                        if(array.includes(seat.id)){
-                            array = array.filter((elem) => elem!==seat.id);
+                        setSelected({number: number, isAvailable: false, id: id});
+                        if(array.includes(id)){
+                            setArray(array.filter((elem) => elem!==id));
                         }else{
-                            array.push(seat.id);
+                            setArray([...array, id]);
                         }
                     }
-                } className="seat blue" >{seat.number}</div>
+                } className="seat blue" >{number}</div>
             )
         }
     }
@@ -59,10 +58,11 @@ function HtmlThirdPage() {
     const [movie, setMovie] = useState(false);
     const [names, setNames] = useState("");
     const [cpf, setCpf] = useState("");
+    const [array, setArray] = useState([]);
+    const [display, setDisplay] = useState(false)
+    const [numberSeat, setNumberSeat] = useState([])
 
     const {idSeats} = useParams();
-
-    const navigate = useNavigate();
 
     useEffect(() => {
         const promisse = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSeats}/seats`);
@@ -74,59 +74,70 @@ function HtmlThirdPage() {
 
     let seatsInfos = movie.seats;
     
-    function fourthPage(event, array) {
+    function fourthPage(event) {
         event.preventDefault();
-        if(names !== "" && cpf.length === 11) {
+        if(names !== "" && cpf.length === 11 && array.length !== 0) {
             console.log("entrou")
             const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", {
-                ids: [1,2,3],
+                ids: array,
                 name: names,
                 cpf: cpf
             });
-            promise.then(() => {console.log("yep"); navigate("/FourthPage")});
+            promise.then(() => {
+                console.log("yep"); 
+                setDisplay(true);
+        });
             promise.catch(error => alert("Confira se você preencheu seu nome e seu cpf corretamente"));
+        }else{
+            alert("Preencha os campos de nome, cpf e assentos corretamente")
         }
     }
-
-    if(movie !== false){
-        return(
-            <>
-                <section className="choose-seats">
-                    <h2>Selecione o(s) assento(s)</h2>
-                    <div className="seats">
-                        {seatsInfos.map(number => <HtmlSeats number={number.name} class={number.isAvailable} id={number.id}/>)}
-                        <div className="subtitle">
-                            <Subtitles class="selected" description="Selecionado"/>
-                            <Subtitles class="free" description="Disponível"/>
-                            <Subtitles class="unavailable" description="Indisponível"/>
+    
+    if(display === false){
+        if(movie !== false){
+            return(
+                <>
+                    <section className="choose-seats">
+                        <h2>Selecione o(s) assento(s)</h2>
+                        <div className="seats">
+                            {seatsInfos.map(number => <HtmlSeats number={number.name} orange={number.isAvailable} id={number.id} setArray={setArray} array={array} setNumberSeat={setNumberSeat} NumberSeat={numberSeat}/>)}
+                            <div className="subtitle">
+                                <Subtitles class="selected" description="Selecionado"/>
+                                <Subtitles class="free" description="Disponível"/>
+                                <Subtitles class="unavailable" description="Indisponível"/>
+                            </div>
+                            <div className="input"> 
+                                <form className="form" onSubmit={fourthPage}>
+                                    <h4>Nome do comprador:</h4>      
+                                    <input
+                                        type="text"
+                                        value={names}
+                                        placeholder="Digite seu nome..."
+                                        onChange={(e) => {setNames(e.target.value) ; console.log("preenchendo name")}}
+                                    />
+                                    <h4>CPF do comprador:</h4>      
+                                    <input
+                                        type="text"
+                                        value={cpf}
+                                        placeholder="Digite seu CPF..."
+                                        onChange={(e) => {setCpf(e.target.value); console.log("preenchendo cpf")}}
+                                    />
+                                    <button type="submit" className="submit">Reservar assento(s)</button>
+                                </form>
+                            </div>
                         </div>
-                        <div className="input"> 
-                            <form className="form" onSubmit={fourthPage}>
-                                <h4>Nome do comprador:</h4>      
-                                <input
-                                    type="text"
-                                    value={names}
-                                    placeholder="Digite seu nome..."
-                                    onChange={(e) => {setNames(e.target.value) ; console.log("preenchendo name")}}
-                                />
-                                <h4>CPF do comprador:</h4>      
-                                <input
-                                    type="text"
-                                    value={cpf}
-                                    placeholder="Digite seu CPF..."
-                                    onChange={(e) => {setCpf(e.target.value); console.log("preenchendo cpf")}}
-                                />
-                                <button type="submit" className="submit">Reservar assento(s)</button>
-                            </form>
-                        </div>
-                    </div>
-                </section>
-                <Footer poster={movie.movie.posterURL} title={movie.movie.title} time={` - ${movie.name}`}/>
-            </>
-        )
+                    </section>
+                    <Footer poster={movie.movie.posterURL} title={movie.movie.title} time={` - ${movie.name}`}/>
+                </>
+            )
+        }else{
+            return (
+                <Loading />
+            )
+        }
     }else{
         return (
-            <Loading />
+            <FourthPage title={movie.movie.title} time={` - ${movie.name}`} day={movie.day.weekday} name={names} cpf={cpf}/>
         )
     }
 }
