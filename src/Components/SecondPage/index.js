@@ -3,17 +3,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Loading from "../Loading/Loading";
+import Footer from "../Footer";
 
 import "./style.css";
-
-function Footer(movie) {
-    return (
-        <footer className="chosen-movie">
-            <img src={movie.poster} alt="" />
-            <h2>{movie.title}</h2>
-        </footer>
-    )
-}
 
 
 
@@ -66,7 +58,7 @@ function HtmlSecondPage() {
                         {days.map(session => <HtmlMovieSection day={session.weekday} date={session.date} showtimes={session.showtimes}/>)}
                     </article>
                 </section>
-                <Footer poster={movie.posterURL} title={movie.title}/>
+                <Footer poster={movie.posterURL} title={movie.title} time=""/>
             </>
         )
     }else{
