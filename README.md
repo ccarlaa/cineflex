@@ -30,5 +30,5 @@ npm install
 ```bash
 node app.js
 ```
-7. Para testar as requisições utilize o [Thunder Client](https://github.com/rangav/thunder-client-support) e importe
+6. Para testar as requisições utilize o [Thunder Client](https://github.com/rangav/thunder-client-support) e importe
 o arquivo "thunder-collection_tweteroo.json" da pasta "thunder-client".
