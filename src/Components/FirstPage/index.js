@@ -36,7 +36,6 @@ function HtmlFirstPage() {
             </section>
         )
     }else{
-        console.log("loading")
         return (
             <Loading />
         )
