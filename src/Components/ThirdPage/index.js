@@ -18,7 +18,7 @@ function Subtitles(props) {
 }
 
 function HtmlSeats(seat) {
-    let {number, orange, id, setArray, array} = seat
+    let {number, orange, id, setArray, array, SetNumberSeat, NumberSeat} = seat
     const [selected, setSelected] = useState({number: number, isAvailable: false, id: id})
     if(orange === true){
         return (
@@ -31,11 +31,14 @@ function HtmlSeats(seat) {
                         setSelected({number: number, isAvailable: true, id: id});
                         if(array.includes(id)){
                             setArray(array.filter((elem) => elem!==id));
+                            SetNumberSeat(NumberSeat.filter((num) => num!==number));
                         }else{
                             setArray([...array, id]);
+                            SetNumberSeat([...NumberSeat, number]);
                         }
                     }
-                } className="seat grey" >{number}</div>
+                } 
+                className="seat grey" >{number}</div>
             )
         }else{
             return (
@@ -43,11 +46,14 @@ function HtmlSeats(seat) {
                         setSelected({number: number, isAvailable: false, id: id});
                         if(array.includes(id)){
                             setArray(array.filter((elem) => elem!==id));
+                            SetNumberSeat(NumberSeat.filter((num) => num!==number));
                         }else{
                             setArray([...array, id]);
+                            SetNumberSeat([...NumberSeat, number]);
                         }
                     }
-                } className="seat blue" >{number}</div>
+                } className="seat blue" >{number}
+                </div>
             )
         }
     }
@@ -59,8 +65,8 @@ function HtmlThirdPage() {
     const [names, setNames] = useState("");
     const [cpf, setCpf] = useState("");
     const [array, setArray] = useState([]);
-    const [display, setDisplay] = useState(false)
-    const [numberSeat, setNumberSeat] = useState([])
+    const [display, setDisplay] = useState(false);
+    const [numberSeat, setNumberSeat] = useState([]);
 
     const {idSeats} = useParams();
 
@@ -77,14 +83,12 @@ function HtmlThirdPage() {
     function fourthPage(event) {
         event.preventDefault();
         if(names !== "" && cpf.length === 11 && array.length !== 0) {
-            console.log("entrou")
             const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", {
                 ids: array,
                 name: names,
                 cpf: cpf
             });
             promise.then(() => {
-                console.log("yep"); 
                 setDisplay(true);
         });
             promise.catch(error => alert("Confira se você preencheu seu nome e seu cpf corretamente"));
@@ -100,7 +104,16 @@ function HtmlThirdPage() {
                     <section className="choose-seats">
                         <h2>Selecione o(s) assento(s)</h2>
                         <div className="seats">
-                            {seatsInfos.map(number => <HtmlSeats number={number.name} orange={number.isAvailable} id={number.id} setArray={setArray} array={array} setNumberSeat={setNumberSeat} NumberSeat={numberSeat}/>)}
+                            {seatsInfos.map(number => <HtmlSeats
+                            number={number.name} 
+                            orange={number.isAvailable} 
+                            id={number.id} 
+                            setArray={setArray} 
+                            array={array} 
+                            setNumberSeat={setNumberSeat} 
+                            NumberSeat={numberSeat}
+                            SetNumberSeat = {setNumberSeat}                            
+                        />)}
                             <div className="subtitle">
                                 <Subtitles class="selected" description="Selecionado"/>
                                 <Subtitles class="free" description="Disponível"/>
@@ -113,14 +126,14 @@ function HtmlThirdPage() {
                                         type="text"
                                         value={names}
                                         placeholder="Digite seu nome..."
-                                        onChange={(e) => {setNames(e.target.value) ; console.log("preenchendo name")}}
+                                        onChange={(e) => {setNames(e.target.value)}}
                                     />
                                     <h4>CPF do comprador:</h4>      
                                     <input
                                         type="text"
                                         value={cpf}
                                         placeholder="Digite seu CPF..."
-                                        onChange={(e) => {setCpf(e.target.value); console.log("preenchendo cpf")}}
+                                        onChange={(e) => {setCpf(e.target.value)}}
                                     />
                                     <button type="submit" className="submit">Reservar assento(s)</button>
                                 </form>
@@ -137,7 +150,14 @@ function HtmlThirdPage() {
         }
     }else{
         return (
-            <FourthPage title={movie.movie.title} time={` - ${movie.name}`} day={movie.day.weekday} name={names} cpf={cpf}/>
+            <FourthPage 
+                title={movie.movie.title} 
+                time={` - ${movie.name}`} 
+                day={movie.day.weekday} 
+                name={names}
+                cpf={cpf}
+                seatsNumbers={numberSeat}
+            />
         )
     }
 }
