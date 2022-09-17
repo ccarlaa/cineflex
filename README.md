@@ -4,7 +4,7 @@
 
 <img src=src/img/cineflex.gif  width="300" />
 
-[Cineflex](https://projeto8-zaprecall-livid.vercel.app/)
+[Cineflex](https://projeto9-cineflex-lake.vercel.app/)
 
 ## 📝 Sobre
 
