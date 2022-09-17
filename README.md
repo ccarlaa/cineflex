@@ -20,7 +20,17 @@ Você pode [acessar o código fonte do projeto](https://github.com/ccarlaa/proje
 
 ## 🛠️ Abrir e rodar o projeto
 
-	@@ -34,6 +28,7 @@ npm install
+Após baixar o projeto, você pode abri-lo com o Visual Studio Code. Para isso, na tela de launcher clique em:
+
+1. File > Open Folder
+2. Procure o local onde o projeto está e o selecione (Caso o projeto seja baixado via zip, é necessário extraí-lo antes de procurá-lo)
+3. Por fim clique em Abrir
+4. Em seguida abra o terminal e instale as dependências com o seguinte comando:
+
+```bash
+npm install 
+```
+
 5. Você  pode rodar o projeto executando:
 
 ```bash
