@@ -20,12 +20,12 @@ function Subtitles(props) {
 function HtmlSeats(seat) {
     let {number, orange, id, setArray, array, SetNumberSeat, NumberSeat} = seat
     const [selected, setSelected] = useState({number: number, isAvailable: false, id: id})
-    if(orange === true){
+    if(orange === false){
         return (
-        <div className="seat true" >{number}</div>
+            <div className="seat true" >{number}</div>
         )
     }else if(number === selected.number){
-        if(selected.isAvailable === false){
+        if(selected.isAvailable === true){
             return (
                 <div onClick={() => {
                         setSelected({number: number, isAvailable: true, id: id});
@@ -47,7 +47,7 @@ function HtmlSeats(seat) {
                         if(array.includes(id)){
                             setArray(array.filter((elem) => elem!==id));
                             SetNumberSeat(NumberSeat.filter((num) => num!==number));
-                        }else{
+                        } else {
                             setArray([...array, id]);
                             SetNumberSeat([...NumberSeat, number]);
                         }
@@ -79,9 +79,9 @@ function HtmlThirdPage() {
     }, []);
 
     let seatsInfos = movie.seats;
-    
-    function fourthPage(event) {
-        event.preventDefault();
+    console.log(seatsInfos)
+    function fourthPage(e) {
+        e.preventDefault();
         if(names !== "" && cpf.length === 11 && array.length !== 0) {
             const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", {
                 ids: array,
@@ -89,8 +89,9 @@ function HtmlThirdPage() {
                 cpf: cpf
             });
             promise.then(() => {
+                console.log("true")
                 setDisplay(true);
-        });
+            });
             promise.catch(error => alert("Confira se você preencheu seu nome e seu cpf corretamente"));
         }else{
             alert("Preencha os campos de nome, cpf e assentos corretamente")
