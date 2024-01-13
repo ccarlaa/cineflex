@@ -1,5 +1,5 @@
-[**English**](#-cineflex)
-[**Portuguese**](#-sobre)
+[**English**](#film_projector-cineflex)
+[**Português**](#-sobre)
 
 ## :film_projector: Cineflex
 
