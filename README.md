@@ -1,11 +1,43 @@
-  ## ⚡️ Cineflex
+[**English**](#-cineflex)
+[**Portuguese**](#-sobre)
 
-<p>Aplicação front-end que visa implementar um site para reservas de ingressos de cinema.</p>
+## :film_projector: Cineflex
 
-<img src=src/img/cineflex.gif  width="300" />
+<img src=src/img/cineflex.gif width="300" />
 
 [Cineflex](https://projeto9-cineflex-lake.vercel.app/)
 
+## 📝 About
+
+The application was created with the goal of gaining experience with the React library, with an emphasis on components and props. The following technologies were used for its development: CSS, HTML, Javascript, and React.
+
+[![My Skills](https://skills.thijs.gg/icons?i=html,css,javascript,react&theme=light)](https://skills.thijs.gg)
+
+## 📁 Project Access
+
+You can [access the project's source code](https://github.com/ccarlaa/projeto9-cineflex) or [download it](https://github.com/ccarlaa/projeto9-cineflex/archive/refs/heads/main.zip).
+
+## 🛠️ Open and Run the Project
+
+After downloading the project, you can open it with Visual Studio Code. To do this, on the launcher screen, click:
+
+1. File > Open Folder
+2. Locate the project's location and select it (If the project is downloaded as a zip file, it needs to be extracted before locating it.)
+3. Finally, click Open
+4. Then open the terminal and install the dependencies with the following command:
+
+```bash
+npm install 
+```
+5. To run de project,execute:
+
+```bash
+npm start
+``` 
+
+6. Finally, access http://localhost:3000 in your browser.
+
+***
 ## 📝 Sobre
 
 <p>A aplicação foi feita com o objetivo de adquirir experiência com a biblioteca React, com ênfase em components e props.
